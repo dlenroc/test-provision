@@ -1,0 +1,92 @@
+{
+  "name": "@dlenroc/test-provision",
+  "version": "0.1.0",
+  "description": "Provision isolated test resources and shared services for Vitest and Playwright.",
+  "keywords": [
+    "vitest",
+    "playwright",
+    "testing",
+    "test-fixtures",
+    "test-automation",
+    "resource-management",
+    "prefetching",
+    "typescript"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dlenroc/test-provision.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
+    },
+    "./vitest": {
+      "types": "./dist/vitest/fixture.d.mts",
+      "default": "./dist/vitest/fixture.mjs"
+    },
+    "./vitest/plugin": {
+      "types": "./dist/vitest/plugin.d.mts",
+      "default": "./dist/vitest/plugin.mjs"
+    },
+    "./playwright": {
+      "types": "./dist/playwright/index.d.mts",
+      "default": "./dist/playwright/index.mjs"
+    },
+    "./playwright/reporter": {
+      "import": {
+        "types": "./dist/playwright/reporter.d.mts",
+        "default": "./dist/playwright/reporter.mjs"
+      },
+      "require": {
+        "types": "./dist/playwright/reporter.d.cts",
+        "default": "./dist/playwright/reporter.cjs"
+      }
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsdown --no-config src/index.ts src/vitest/fixture.ts src/vitest/plugin.ts src/vitest/setup.ts src/playwright/index.ts src/playwright/reporter.ts --format esm --dts && tsdown --no-config src/playwright/reporter.ts --format cjs --dts --no-clean --out-dir dist/playwright --deps.alwaysBundle hash-object",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p test/tsconfig.json --noEmit",
+    "test": "npm run build && npm run typecheck && vitest run --typecheck",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "hash-object": "^5.1.0",
+    "ws": "^8.22.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.1",
+    "@types/node": "^26.6.6",
+    "@types/ws": "^8.18.2",
+    "@vitest/browser-playwright": "5.1.0",
+    "@vitest/coverage-v8": "^5.1.0",
+    "capnweb": "^0.12.0",
+    "tsdown": "0.23.4",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.0"
+  },
+  "peerDependencies": {
+    "@playwright/test": ">=1.62.0",
+    "capnweb": "^0.12.0",
+    "vitest": ">=5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "vitest": {
+      "optional": true
+    },
+    "@playwright/test": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=24.11.0"
+  }
+}
